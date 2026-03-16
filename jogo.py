@@ -1,15 +1,16 @@
 import time
 import random
 
-# A variável que controla se o jogo continua rodando
 jogar = "S"
 
-# O Loop Gigante que engloba o jogo inteiro
 while jogar.upper() == "S":
 
-    # Status resetados toda vez que o jogo começa!
+    # Status resetados toda vez que o jogo começa
     vida_maite = 100
     vida_tita = 50
+    mamadeiras_agua = 2
+    pao_de_queijo = 1  # Novo item!
+    dano_extra = 0  # Modificador de dano (começa zerado)
 
     print("=======================================")
     print(" 🧸 MAITÊ VS PELÚCIAS VIVAS 🧸")
@@ -23,39 +24,56 @@ while jogar.upper() == "S":
     print(f"Sua Vida (Maitê): {vida_maite} HP")
     print(f"Vida do Tita: {vida_tita} HP\n")
 
-    # O Loop de Batalha (esteira interna)
     while vida_maite > 0 and vida_tita > 0:
         print("=======================================")
-        print("Escolha o ataque da Maitê (1 ano e 5 meses de fúria):")
-        print("1 - Arranhão (Dano: 15)")
-        print("2 - Mordida (Dano: 20)")
+        print("Escolha a ação da Maitê:")
+        print(f"1 - Arranhão (Dano: {15 + dano_extra})")
+        print(f"2 - Mordida (Dano: {20 + dano_extra})")
         print("3 - Risada de Naligo (ESPECIAL: Hit Kill)")
+        print(f"4 - Mamadeirinha de Água (Cura: 30 HP) [Restam: {mamadeiras_agua}]")
+        print(f"5 - Pãozinho de Queijo (Buff: +10 de Dano) [Restam: {pao_de_queijo}]")
         print("=======================================")
 
-        escolha = input("Digite o número do ataque e dê Enter: ")
+        escolha = input("Digite o número da ação e dê Enter: ")
 
         if escolha == "1":
-            print("\n💅 Maitê desfere um arranhão violento na cara do Tita!")
-            vida_tita = vida_tita - 15
+            dano_final = 15 + dano_extra
+            print(f"\n💅 Maitê desfere um arranhão violento na cara do Tita! (-{dano_final} HP)")
+            vida_tita = vida_tita - dano_final
         elif escolha == "2":
-            print("\n🦷 Maitê crava os dentinhos e dá uma mordida cabulosa!")
-            vida_tita = vida_tita - 20
+            dano_final = 20 + dano_extra
+            print(f"\n🦷 Maitê crava os dentinhos e dá uma mordida cabulosa! (-{dano_final} HP)")
+            vida_tita = vida_tita - dano_final
         elif escolha == "3":
             print("\n✨ Maitê solta a famosa 'Risada de Naligo'!")
             print("O Tita não resiste a tanta fofura, derrete de tanto amor e desiste da luta!")
             vida_tita = 0
+        elif escolha == "4":
+            if mamadeiras_agua > 0:
+                print("\n💧 Maitê toma a mamadeirinha de água, dá uma respirada e recupera energia!")
+                vida_maite = min(vida_maite + 30, 100)
+                mamadeiras_agua = mamadeiras_agua - 1
+            else:
+                print("\n❌ Acabou a água! Maitê joga a mamadeira no chão, fica brava e perde o turno!")
+        elif escolha == "5":
+            if pao_de_queijo > 0:
+                print("\n🧀 Maitê come um pãozinho de queijo! Ela fica mais forte e seus ataques ganham +10 de dano!")
+                dano_extra = 10
+                pao_de_queijo = pao_de_queijo - 1
+            else:
+                print("\n❌ Já comeu tudo! Maitê procura mais pãozinho, chora um pouco e perde o turno!")
         else:
             print(
                 "\n❌ Comando inválido! O papai passou no corredor, Maitê largou a guarda pra gritar 'PAAAAI!' e perdeu o turno!")
 
-        if vida_tita > 0:
+        # Só mostra a vida do Tita caindo se a Maitê usou um ataque (opções 1 ou 2)
+        if vida_tita > 0 and escolha in ["1", "2"]:
             print(f"-> Vida do Tita agora é: {vida_tita} HP\n")
-        else:
+        elif vida_tita <= 0:
             print(f"-> A vida do Tita chegou a zero!\n")
 
         time.sleep(2)
 
-        # Turno do Tita
         if vida_tita > 0:
             print("\n=======================================")
             print("🐻 Turno do Tita! Ele se prepara para atacar...")
@@ -79,7 +97,6 @@ while jogar.upper() == "S":
 
             time.sleep(2)
 
-    # Resultado Final da Partida
     print("\n=======================================")
     if vida_maite <= 0:
         print("💀 FIM DE JOGO! Tita capturou a Meg e dominou o quarto!")
@@ -87,9 +104,7 @@ while jogar.upper() == "S":
         print("🏆 VITÓRIA! Maitê derrotou a pelúcia e salvou a gatinha Meg!")
     print("=======================================\n")
 
-    # A pergunta que define se o loop gigante roda de novo
     jogar = input("Deseja jogar novamente? (S/N): ")
     print("\n")
 
-# Se o cara digitar qualquer coisa que não seja 'S', o código cai aqui fora e encerra.
 print("👋 Jogo encerrado. O quarto da Maitê está seguro (por enquanto)!")
